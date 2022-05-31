@@ -50,13 +50,13 @@ export const AppbarBackAction = ({ ...props }) => {
     );
 };
 
-export const AppbarLoading = () => {
+export const AppbarLoading = ({ color }) => {
     const { colors: { onPrimary } } = useTheme();
 
     return (
         <Loading
             animating
-            color={onPrimary}
+            color={color ?? onPrimary}
         />
     );
 };
