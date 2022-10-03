@@ -5,6 +5,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native-paper": "*",
+    "react-sweet-state": "*",
     "styled-components": "*"
   }
 }

@@ -1,21 +1,45 @@
 import React from 'react';
 import {
+    createStore,
+    createActionsHook,
+    createStateHook
+} from 'react-sweet-state';
+import {
     Appbar as DefaultAppbar,
     useTheme
 } from 'react-native-paper';
 import { Loading } from './styled';
 
-let isStatusBarTranslucent = true;
-export const setIsStatusBarTranslucent = isTranslucent => {
-    isStatusBarTranslucent = isTranslucent;
-};
+const Store = createStore({
+    initialState: {
+        isStatusBarTranslucent: true
+    },
+    actions: {
+        setIsStatusBarTranslucent: isStatusBarTranslucent => ({ setState }) => {
+            setState({ isStatusBarTranslucent });
+        }
+    },
+    name: 'ExpoAppBarStore'
+});
 
-export const Appbar = ({ ...props }) => (
-    <DefaultAppbar.Header
-        {...(isStatusBarTranslucent ? {} : { statusBarHeight: 0 })}
-        {...props}
-    />
-);
+const useActions = createActionsHook(Store);
+
+const useIsStatusBarTranslucent = createStateHook(Store, {
+    selector: ({ isStatusBarTranslucent }) => isStatusBarTranslucent
+});
+
+export const useSetIsStatusBarTranslucent = () => useActions().setIsStatusBarTranslucent;
+
+export const Appbar = ({ ...props }) => {
+    const isStatusBarTranslucent = useIsStatusBarTranslucent();
+
+    return (
+        <DefaultAppbar.Header
+            {...(isStatusBarTranslucent ? {} : { statusBarHeight: 0 })}
+            {...props}
+        />
+    );
+};
 
 export const AppbarContent = ({ ...props }) => {
     const { colors: { onPrimary } } = useTheme();
