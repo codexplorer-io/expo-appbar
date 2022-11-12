@@ -8,7 +8,13 @@ import {
     Appbar as DefaultAppbar,
     useTheme
 } from 'react-native-paper';
-import { Loading } from './styled';
+import {
+    Loading,
+    SearchBar,
+    AppbarHeader,
+    AppbarColumn,
+    AppbarRow
+} from './styled';
 
 const Store = createStore({
     initialState: {
@@ -30,14 +36,41 @@ const useIsStatusBarTranslucent = createStateHook(Store, {
 
 export const useSetIsStatusBarTranslucent = () => useActions().setIsStatusBarTranslucent;
 
-export const Appbar = ({ ...props }) => {
+const APPBAR_HEIGHT = 50;
+const APPBAR_PADDING_BOTTOM = 6;
+const SEARCH_HEIGHT = 54;
+
+export const Appbar = ({
+    children,
+    hasSearchBar,
+    searchText,
+    onSearchTextChange,
+    ...props
+}) => {
     const isStatusBarTranslucent = useIsStatusBarTranslucent();
+    const appbarHeight = APPBAR_HEIGHT + APPBAR_PADDING_BOTTOM + (hasSearchBar ? SEARCH_HEIGHT : 0);
 
     return (
-        <DefaultAppbar.Header
+        <AppbarHeader
             {...(isStatusBarTranslucent ? {} : { statusBarHeight: 0 })}
+            styledHeight={appbarHeight}
             {...props}
-        />
+        >
+            <AppbarColumn>
+                <AppbarRow styledHeight={APPBAR_HEIGHT}>
+                    {children}
+                </AppbarRow>
+                {hasSearchBar && (
+                    <AppbarRow styledHeight={SEARCH_HEIGHT}>
+                        <SearchBar
+                            placeholder='Search'
+                            onChangeText={onSearchTextChange}
+                            value={searchText}
+                        />
+                    </AppbarRow>
+                )}
+            </AppbarColumn>
+        </AppbarHeader>
     );
 };
 
