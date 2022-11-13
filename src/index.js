@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
     createStore,
     createActionsHook,
@@ -114,6 +115,24 @@ export const AppbarLoading = ({ color }) => {
         <Loading
             animating
             color={color ?? onPrimary}
+        />
+    );
+};
+
+export const AppbarDrawerMenuAction = ({ ...props }) => {
+    const { colors: { onPrimary } } = useTheme();
+    const navigation = useNavigation();
+
+    const onPress = () => {
+        navigation.openDrawer();
+    };
+
+    return (
+        <DefaultAppbar.Action
+            color={onPrimary}
+            icon='menu'
+            onPress={onPress}
+            {...props}
         />
     );
 };
