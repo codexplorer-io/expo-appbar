@@ -46,6 +46,7 @@ export const Appbar = ({
     hasSearchBar,
     searchText,
     onSearchTextChange,
+    searchPlaceholder = 'Search',
     ...props
 }) => {
     const isStatusBarTranslucent = useIsStatusBarTranslucent();
@@ -64,7 +65,7 @@ export const Appbar = ({
                 {hasSearchBar && (
                     <AppbarRow styledHeight={SEARCH_HEIGHT}>
                         <SearchBar
-                            placeholder='Search'
+                            placeholder={searchPlaceholder}
                             onChangeText={onSearchTextChange}
                             value={searchText}
                         />
