@@ -14,7 +14,8 @@ import {
     SearchBar,
     AppbarHeader,
     AppbarColumn,
-    AppbarRow
+    AppbarRow,
+    SafeArea
 } from './styled';
 
 const Store = createStore({
@@ -53,26 +54,28 @@ export const Appbar = ({
     const appbarHeight = APPBAR_HEIGHT + APPBAR_PADDING_BOTTOM + (hasSearchBar ? SEARCH_HEIGHT : 0);
 
     return (
-        <AppbarHeader
-            {...(isStatusBarTranslucent ? {} : { statusBarHeight: 0 })}
-            styledHeight={appbarHeight}
-            {...props}
-        >
-            <AppbarColumn>
-                <AppbarRow styledHeight={APPBAR_HEIGHT}>
-                    {children}
-                </AppbarRow>
-                {hasSearchBar && (
-                    <AppbarRow styledHeight={SEARCH_HEIGHT}>
-                        <SearchBar
-                            placeholder={searchPlaceholder}
-                            onChangeText={onSearchTextChange}
-                            value={searchText}
-                        />
+        <SafeArea edges={['right', 'top', 'left']}>
+            <AppbarHeader
+                {...(isStatusBarTranslucent ? {} : { statusBarHeight: 0 })}
+                styledHeight={appbarHeight}
+                {...props}
+            >
+                <AppbarColumn>
+                    <AppbarRow styledHeight={APPBAR_HEIGHT}>
+                        {children}
                     </AppbarRow>
-                )}
-            </AppbarColumn>
-        </AppbarHeader>
+                    {hasSearchBar && (
+                        <AppbarRow styledHeight={SEARCH_HEIGHT}>
+                            <SearchBar
+                                placeholder={searchPlaceholder}
+                                onChangeText={onSearchTextChange}
+                                value={searchText}
+                            />
+                        </AppbarRow>
+                    )}
+                </AppbarColumn>
+            </AppbarHeader>
+        </SafeArea>
     );
 };
 

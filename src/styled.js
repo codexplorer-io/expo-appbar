@@ -4,10 +4,15 @@ import {
     Searchbar,
     Appbar
 } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const Loading = styled(ActivityIndicator)`
     margin-left: 12px;
     margin-right: 12px;
+`;
+
+export const SafeArea = styled(SafeAreaView)`
+    background-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const AppbarHeader = styled(Appbar.Header)`

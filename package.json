@@ -6,6 +6,7 @@
     "react": "*",
     "react-native-paper": "*",
     "react-sweet-state": "*",
-    "styled-components": "*"
+    "styled-components": "*",
+    "react-native-safe-area-context": "*"
   }
 }
