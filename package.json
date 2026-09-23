@@ -1,12 +1,12 @@
 {
   "name": "@codexporer.io/expo-appbar",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "src/index.tsx",
   "peerDependencies": {
     "react": "*",
-    "react-native-paper": "*",
-    "react-sweet-state": "*",
-    "styled-components": "*",
-    "react-native-safe-area-context": "*"
+    "react-native": "*",
+    "react-native-safe-area-context": "*",
+    "@expo/vector-icons": "*",
+    "@codexporer.io/expo-app-theme": "*"
   }
 }
