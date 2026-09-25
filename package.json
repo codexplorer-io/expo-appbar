@@ -7,6 +7,7 @@
     "react-native": "*",
     "react-native-safe-area-context": "*",
     "@expo/vector-icons": "*",
-    "@codexporer.io/expo-app-theme": "*"
+    "@codexporer.io/expo-app-theme": "*",
+    "@codexporer.io/expo-searchbar": "*"
   }
 }

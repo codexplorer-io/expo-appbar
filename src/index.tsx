@@ -2,7 +2,6 @@ import React from 'react';
 import {
     View,
     Text,
-    TextInput,
     TouchableOpacity,
     ActivityIndicator,
     StyleSheet,
@@ -13,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppTheme } from '@codexporer.io/expo-app-theme';
+import { Searchbar, SearchbarProps } from '@codexporer.io/expo-searchbar';
 
 const APPBAR_HEIGHT = 50;
 const SEARCH_HEIGHT = 54;
@@ -23,6 +23,8 @@ export interface AppbarProps {
     searchText?: string;
     onSearchTextChange?: (text: string) => void;
     searchPlaceholder?: string;
+    onClearSearch?: () => void;
+    searchbarProps?: Partial<SearchbarProps>;
     style?: StyleProp<ViewStyle>;
 }
 
@@ -32,6 +34,8 @@ export const Appbar: React.FC<AppbarProps> = ({
     searchText,
     onSearchTextChange,
     searchPlaceholder = 'Search',
+    onClearSearch,
+    searchbarProps,
     style
 }) => {
     const theme = useAppTheme();
@@ -47,16 +51,15 @@ export const Appbar: React.FC<AppbarProps> = ({
                 </View>
                 {hasSearchBar && (
                     <View style={styles.searchRow}>
-                        <View style={[styles.searchBar, { backgroundColor: theme.inputBackground }]}>
-                            <MaterialCommunityIcons name="magnify" size={20} color={theme.placeholder} style={styles.searchIcon} />
-                            <TextInput
-                                style={[styles.searchInput, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-                                placeholder={searchPlaceholder}
-                                placeholderTextColor={theme.placeholder}
-                                value={searchText}
-                                onChangeText={onSearchTextChange}
-                            />
-                        </View>
+                        <Searchbar
+                            value={searchText}
+                            onChangeText={onSearchTextChange}
+                            placeholder={searchPlaceholder}
+                            onClear={onClearSearch}
+                            style={styles.searchBar}
+                            inputStyle={styles.searchInput}
+                            {...searchbarProps}
+                        />
                     </View>
                 )}
             </View>
@@ -228,19 +231,15 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
+        marginHorizontal: 0,
+        marginVertical: 0,
+        height: 38,
         borderRadius: 8,
         paddingHorizontal: 10,
-        height: 38,
-    },
-    searchIcon: {
-        marginRight: 6,
+        borderWidth: 0,
     },
     searchInput: {
-        flex: 1,
         fontSize: 15,
-        padding: 0,
     },
     content: {
         flex: 1,
