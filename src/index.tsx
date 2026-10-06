@@ -134,7 +134,7 @@ export const AppbarAction: React.FC<AppbarActionProps> = ({
             onPress={onPress}
             disabled={disabled}
             activeOpacity={0.7}
-            style={[styles.actionButton, style]}
+            style={[styles.actionButton, style, disabled && styles.disabled]}
         >
             <MaterialCommunityIcons name={icon as never} size={size} color={iconColor} />
         </TouchableOpacity>
@@ -259,6 +259,9 @@ const styles = StyleSheet.create({
         height: 44,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    disabled: {
+        opacity: 0.5,
     },
     loadingContainer: {
         paddingHorizontal: 12,
