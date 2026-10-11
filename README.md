@@ -74,7 +74,7 @@ export function SearchableHeader({ onOpenDrawer, onFilter }) {
 }
 ```
 
-## Component Reference
+## API Reference: Components
 
 ### `<Appbar />`
 Top container wrapping headers in `SafeAreaView` (edges: `right`, `top`, `left`).
