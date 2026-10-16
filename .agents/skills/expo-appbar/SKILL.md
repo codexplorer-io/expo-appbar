@@ -10,6 +10,23 @@ description: Instructions and guidelines for using @codexporer.io/expo-appbar (E
 
 ---
 
+## Peer Dependencies
+
+All peer dependencies must be installed in consuming projects:
+- `react`: `*`
+- `react-native`: `*`
+- `react-native-safe-area-context`: `*`
+- `@expo/vector-icons`: `*`
+- `@codexporer.io/expo-app-theme`: `*`
+- `@codexporer.io/expo-searchbar`: `*`
+
+---
+
+## Theme Requirement
+All `Appbar` components call `useAppTheme()` to derive semantic colors (`theme.appbarBackground` for container background, `theme.text` for title, subtitle, icons, and loader). The application must mount `<ThemeProvider>` from `@codexporer.io/expo-app-theme` above `<Appbar>`.
+
+---
+
 ## When to Use
 - Implementing custom screen headers replacing or augmenting React Navigation header bars.
 - Providing standardized header titles with back navigation buttons.
@@ -88,54 +105,76 @@ export function SearchableListScreen() {
 ## API Reference
 
 ### `<Appbar />`
+Top container wrapping headers in `SafeAreaView` (edges: `right`, `top`, `left`). Automatically applies `backgroundColor: theme.appbarBackground`.
+
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | — | Toolbar action elements and content |
-| `hasSearchBar` | `boolean` | `false` | Shows integrated search input row below header |
+| `children` | `React.ReactNode` | — | Toolbar action elements and content row items |
+| `hasSearchBar` | `boolean` | `false` | When true, renders an integrated search bar row below header row |
 | `searchText` | `string` | — | Controlled search query string |
 | `onSearchTextChange` | `(text: string) => void` | — | Search change callback |
 | `searchPlaceholder` | `string` | `'Search'` | Search input placeholder |
 | `onClearSearch` | `() => void` | — | Callback fired when search clear icon is pressed |
+| `searchbarProps` | `Partial<SearchbarProps>` | — | Extra props forwarded to `@codexporer.io/expo-searchbar` |
 | `style` | `StyleProp<ViewStyle>` | — | Custom safe area container style |
 
 ### `<AppbarContent />`
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `title` | `string \| ReactNode` | Header title |
-| `subtitle` | `string \| ReactNode` | Optional secondary subtitle text |
-| `titleStyle` | `StyleProp<TextStyle>` | Title typography override |
-| `subtitleStyle` | `StyleProp<TextStyle>` | Subtitle typography override |
+Header title and optional subtitle with single-line truncation (`numberOfLines={1}`).
 
-### `<AppbarBackAction />`
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `onPress` | `() => void` | Back button callback |
-| `color` | `string` | Icon tint override (defaults to `theme.text`) |
-| `size` | `number` | Icon size (defaults to `24`) |
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `React.ReactNode` | — | Header title string or custom ReactNode |
+| `subtitle` | `React.ReactNode` | — | Optional secondary subtitle text |
+| `titleStyle` | `StyleProp<TextStyle>` | — | Title typography override (default: `fontSize: 18`, `fontWeight: '600'`) |
+| `subtitleStyle` | `StyleProp<TextStyle>` | — | Subtitle typography override (default: `fontSize: 12`, `marginTop: 2`) |
+| `color` | `string` | `theme.text` | Text color override for both title and subtitle |
+| `style` | `StyleProp<ViewStyle>` | — | Custom container style (default: `flex: 1`, `paddingHorizontal: 12`) |
 
 ### `<AppbarAction />`
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `icon` | `string` | MaterialCommunityIcons name |
-| `onPress` | `() => void` | Action click callback |
-| `disabled` | `boolean` | Disables interaction |
-| `color` | `string` | Icon tint override |
+Touch action icon button using `@expo/vector-icons` (`MaterialCommunityIcons`).
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `icon` | `string` | — | MaterialCommunityIcons name |
+| `color` | `string` | `theme.text` | Icon color override |
+| `size` | `number` | `24` | Icon diameter in points |
+| `onPress` | `() => void` | — | Action click callback |
+| `disabled` | `boolean` | `false` | Disables interaction (applies `opacity: 0.5`) |
+| `style` | `StyleProp<ViewStyle>` | — | Custom touchable container style (default: 44x44 points) |
+
+### `<AppbarBackAction />`
+Preconfigured back button shortcut rendering `<AppbarAction icon="arrow-left" />`.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `string` | `theme.text` | Icon tint override |
+| `size` | `number` | `24` | Icon diameter in points |
+| `onPress` | `() => void` | — | Back button callback |
+| `disabled` | `boolean` | `false` | Whether action is disabled |
+| `style` | `StyleProp<ViewStyle>` | — | Custom button style |
 
 ### `<AppbarDrawerMenuAction />`
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `onPress` | `() => void` | Drawer menu toggle callback (`icon="menu"`) |
-| `color` | `string` | Icon tint override |
-| `size` | `number` | Icon size (defaults to `24`) |
+Preconfigured drawer menu shortcut rendering `<AppbarAction icon="menu" />`.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `string` | `theme.text` | Icon tint override |
+| `size` | `number` | `24` | Icon diameter in points |
+| `onPress` | `() => void` | — | Drawer menu toggle callback |
+| `style` | `StyleProp<ViewStyle>` | — | Custom button style |
 
 ### `<AppbarLoading />`
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `color` | `string` | Activity indicator tint override (defaults to `theme.text`) |
-| `size` | `'small' \| 'large' \| number` | Activity indicator size preset or diameter |
+Activity indicator spinner aligned within the header row.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `string` | `theme.text` | Activity indicator tint override |
+| `size` | `'small' \| 'large' \| number` | `'small'` | Activity indicator size preset or diameter |
 
 ---
 
 ## Critical Rules & Guidelines
-1. **Safe Area Automatic**: `Appbar` internally includes `SafeAreaView` with top, left, and right edges. Do not wrap it in a redundant outer SafeAreaView.
-2. **Standard Theme Token**: Background automatically renders `theme.appbarBackground`.
+1. **Safe Area Automatic**: `Appbar` internally includes `SafeAreaView` with top, left, and right edges. Do not wrap it in a redundant outer SafeAreaView or manually pad status bar insets.
+2. **Standard Theme Token**: Background automatically renders `theme.appbarBackground`. Icons and text default to `theme.text`.
+3. **ThemeProvider Requirement**: `Appbar` calls `useAppTheme()` and must be rendered inside `<ThemeProvider>`.
+4. **Standard Back Navigation**: Always use `AppbarBackAction` rather than writing custom back buttons.

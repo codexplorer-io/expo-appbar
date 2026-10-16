@@ -1,17 +1,34 @@
 # `@codexporer.io/expo-appbar`
 
-Material Design-inspired top navigation header and Appbar suite for Expo and React Native. Includes safe area handling, integrated search bar powered by `@codexporer.io/expo-searchbar`, title & subtitle typography, icon actions, and theme integration.
+Material Design-inspired top navigation header and Appbar suite for Expo and React Native. Includes safe area handling, integrated search bar powered by `@codexporer.io/expo-searchbar`, title & subtitle typography, icon actions, and theme integration via `@codexporer.io/expo-app-theme`.
 
-## Installation & Peer Dependencies
+---
+
+## Peer Dependencies
+
+All peer dependencies must be installed in consuming projects:
+- `react`: `*`
+- `react-native`: `*`
+- `react-native-safe-area-context`: `*`
+- `@expo/vector-icons`: `*`
+- `@codexporer.io/expo-app-theme`: `*`
+- `@codexporer.io/expo-searchbar`: `*`
+
+---
+
+## Installation
 
 ```bash
 yarn add @codexporer.io/expo-appbar
 ```
 
-Ensure peer dependencies are installed in your project:
-```bash
-yarn add react-native-safe-area-context @expo/vector-icons @codexporer.io/expo-app-theme @codexporer.io/expo-searchbar
-```
+---
+
+## Theme Requirement
+
+All `Appbar` components call `useAppTheme()` to derive semantic colors (`theme.appbarBackground` for the bar container, and `theme.text` for title, subtitle, icons, and loading indicator). Your application must have `<ThemeProvider>` from `@codexporer.io/expo-app-theme` mounted higher in the component tree.
+
+---
 
 ## Quick Start
 
@@ -74,33 +91,35 @@ export function SearchableHeader({ onOpenDrawer, onFilter }) {
 }
 ```
 
+---
+
 ## API Reference: Components
 
 ### `<Appbar />`
-Top container wrapping headers in `SafeAreaView` (edges: `right`, `top`, `left`).
+Top container wrapping headers in `SafeAreaView` (edges: `right`, `top`, `left`). Automatically applies `backgroundColor: theme.appbarBackground`.
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | — | Actions and content rows |
-| `hasSearchBar` | `boolean` | `false` | When true, renders an integrated search bar row |
+| `children` | `React.ReactNode` | — | Toolbar action elements and content row items |
+| `hasSearchBar` | `boolean` | `false` | When true, renders an integrated search bar row below header row |
 | `searchText` | `string` | — | Current search text value |
 | `onSearchTextChange` | `(text: string) => void` | — | Callback invoked when search input changes |
 | `searchPlaceholder` | `string` | `'Search'` | Placeholder text for search bar |
-| `onClearSearch` | `() => void` | — | Callback invoked when clear button is pressed |
-| `searchbarProps` | `Partial<SearchbarProps>` | — | Extra props forwarded to `Searchbar` |
-| `style` | `StyleProp<ViewStyle>` | — | Custom styles applied to safe area container |
+| `onClearSearch` | `() => void` | — | Callback invoked when search clear icon is pressed |
+| `searchbarProps` | `Partial<SearchbarProps>` | — | Extra props forwarded to `@codexporer.io/expo-searchbar` |
+| `style` | `StyleProp<ViewStyle>` | — | Custom styles applied to outer `SafeAreaView` container |
 
 ### `<AppbarContent />`
-Header title and optional subtitle.
+Header title and optional subtitle with automated truncation (`numberOfLines={1}`).
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `title` | `ReactNode` | — | Header title string or custom node |
-| `subtitle` | `ReactNode` | — | Optional subtitle below the title |
-| `titleStyle` | `StyleProp<TextStyle>` | — | Custom style for title |
-| `subtitleStyle` | `StyleProp<TextStyle>` | — | Custom style for subtitle |
-| `color` | `string` | `theme.text` | Text color override |
-| `style` | `StyleProp<ViewStyle>` | — | Custom container style |
+| `title` | `React.ReactNode` | — | Header title string or custom ReactNode |
+| `subtitle` | `React.ReactNode` | — | Optional subtitle below the title |
+| `titleStyle` | `StyleProp<TextStyle>` | — | Custom style for title (default: `fontSize: 18`, `fontWeight: '600'`) |
+| `subtitleStyle` | `StyleProp<TextStyle>` | — | Custom style for subtitle (default: `fontSize: 12`, `marginTop: 2`) |
+| `color` | `string` | `theme.text` | Text color override for both title and subtitle |
+| `style` | `StyleProp<ViewStyle>` | — | Custom container style (default: `flex: 1`, `paddingHorizontal: 12`) |
 
 ### `<AppbarAction />`
 Touch action icon button using `@expo/vector-icons` (`MaterialCommunityIcons`).
@@ -108,20 +127,42 @@ Touch action icon button using `@expo/vector-icons` (`MaterialCommunityIcons`).
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `icon` | `string` | — | Icon name from `MaterialCommunityIcons` |
-| `onPress` | `() => void` | — | Press callback |
 | `color` | `string` | `theme.text` | Icon color override |
 | `size` | `number` | `24` | Icon diameter in points |
+| `onPress` | `() => void` | — | Press callback |
+| `disabled` | `boolean` | `false` | Whether action is disabled (applies `opacity: 0.5`) |
+| `style` | `StyleProp<ViewStyle>` | — | Custom touchable container style (default: 44x44 points) |
+
+### `<AppbarBackAction />`
+Preconfigured back button shortcut rendering `<AppbarAction icon="arrow-left" />`.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `string` | `theme.text` | Icon tint override |
+| `size` | `number` | `24` | Icon diameter in points |
+| `onPress` | `() => void` | — | Navigation back press callback |
 | `disabled` | `boolean` | `false` | Whether action is disabled |
 | `style` | `StyleProp<ViewStyle>` | — | Custom button style |
 
-### `<AppbarBackAction />`
-Back button shortcut (`icon="arrow-left"`).
-
 ### `<AppbarDrawerMenuAction />`
-Drawer menu shortcut (`icon="menu"`).
+Preconfigured drawer menu shortcut rendering `<AppbarAction icon="menu" />`.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `string` | `theme.text` | Icon tint override |
+| `size` | `number` | `24` | Icon diameter in points |
+| `onPress` | `() => void` | — | Drawer menu toggle callback |
+| `style` | `StyleProp<ViewStyle>` | — | Custom button style |
 
 ### `<AppbarLoading />`
-Header activity indicator spinner.
+Activity indicator spinner aligned within the header row.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `string` | `theme.text` | Indicator tint color override |
+| `size` | `'small' \| 'large' \| number` | `'small'` | Size of the activity indicator |
+
+---
 
 ## License
 
